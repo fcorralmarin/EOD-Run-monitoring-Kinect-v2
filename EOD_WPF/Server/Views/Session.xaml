@@ -1,0 +1,201 @@
+﻿<Window x:Class="Server.Session"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Server.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        mc:Ignorable="d"
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Title="Session" Height="585" Width="1490">
+    <Window.Resources>
+        <vm:SessionViewModel    x:Key="SessionVM"/>
+    </Window.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding DisposeCommand, Source={StaticResource SessionVM}}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid DataContext="{StaticResource SessionVM}" Margin="10,10,10,0" >
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Loaded">
+                <i:InvokeCommandAction Command="{Binding InitializeCommand}"/>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" Margin="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Image Source="{Binding LocalKinect.Image}" Width="Auto" Height="Auto" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="Local device" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Bottom"/>
+                    </Grid>
+                    <Grid Grid.Column="1" Margin="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Image Source="{Binding RemoteKinect.Image}" Width="Auto"  Height="Auto" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Text="Remote device" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Bottom"/>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="1" Margin="2,2,2,0">
+                    <ProgressBar Name="pbN" VerticalAlignment="Bottom" Height="5" Minimum="0" Maximum="100" Foreground="{Binding SessionPercentageColor, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Value="{Binding SessionPercentage,Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Height="20">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}Time: {0} / {1}">
+                                <Binding Path="CurrentDuration" />
+                                <Binding Path="MaximumDuration" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="2" Margin="5,5,5,0" HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border BorderBrush="Black" BorderThickness="1" Grid.Column="0">
+                    <Grid Name="Left">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <oxy:PlotView Model="{Binding Left.Ankle.PlotModel}" Grid.Row="0"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+                            <Label Content="Max:"/>
+                            <Label Content="{Binding Left.Ankle.Max}"/>
+                            <Label Content="Min:"/>
+                            <Label Content="{Binding Left.Ankle.Min}"/>
+                            <Label Content="ROM:"/>
+                            <Label Content="{Binding Left.Ankle.ROM}"/>
+                        </StackPanel>
+                        <oxy:PlotView Model="{Binding Left.Knee.PlotModel}" Grid.Row="2"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center">
+                            <Label Content="Max:"/>
+                            <Label Content="{Binding Left.Knee.Max}"/>
+                            <Label Content="Min:"/>
+                            <Label Content="{Binding Left.Knee.Min}"/>
+                            <Label Content="ROM:"/>
+                            <Label Content="{Binding Left.Knee.ROM}"/>
+                        </StackPanel>
+                        <oxy:PlotView Model="{Binding Left.Hip.PlotModel}" Grid.Row="4"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Center">
+                            <Label Content="Max:"/>
+                            <Label Content="{Binding Left.Hip.Max}"/>
+                            <Label Content="Min:"/>
+                            <Label Content="{Binding Left.Hip.Min}"/>
+                            <Label Content="ROM:"/>
+                            <Label Content="{Binding Left.Hip.ROM}"/>
+                        </StackPanel>
+                            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="6">
+                                <Label Content="Left side" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" />                                
+                            </Border>
+                    </Grid>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1">
+                    <Grid Name="Right">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <oxy:PlotView Model="{Binding Right.Ankle.PlotModel}" Grid.Row="0"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+                            <Label Content="Max:"/>
+                            <Label Content="{Binding Right.Ankle.Max}"/>
+                            <Label Content="Min:"/>
+                            <Label Content="{Binding Right.Ankle.Min}"/>
+                            <Label Content="ROM:"/>
+                            <Label Content="{Binding Right.Ankle.ROM}"/>
+                        </StackPanel>
+                        <oxy:PlotView Model="{Binding Right.Knee.PlotModel}" Grid.Row="2"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center">
+                            <Label Content="Max:"/>
+                            <Label Content="{Binding Right.Knee.Max}"/>
+                            <Label Content="Min:"/>
+                            <Label Content="{Binding Right.Knee.Min}"/>
+                            <Label Content="ROM:"/>
+                            <Label Content="{Binding Right.Knee.ROM}"/>
+                        </StackPanel>
+                        <oxy:PlotView Model="{Binding Right.Hip.PlotModel}" Grid.Row="4"/>
+                        <StackPanel Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Center">
+                            <Label Content="Max:"/>
+                            <Label Content="{Binding Right.Hip.Max}"/>
+                            <Label Content="Min:"/>
+                            <Label Content="{Binding Right.Hip.Min}"/>
+                            <Label Content="ROM:"/>
+                            <Label Content="{Binding Right.Hip.ROM}"/>
+                        </StackPanel>
+                            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="6">
+                                <Label Content="Right side" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" />
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>                
+                <Grid Grid.Row="1" Margin="10,10,10,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Command="{Binding RecordCommand}" IsEnabled="{Binding CanRecord}" Content="Start" HorizontalAlignment="Left" Height="20" Width="75" Grid.Row="1" Grid.Column="0"/>
+                    <Button Command="{Binding StopCommand}" IsEnabled="{Binding CanStop}" Content="Stop" HorizontalAlignment="Left" Height="20" Width="75" Margin="5,0,0,0" Grid.Row="1" Grid.Column="1"/>
+                    <Button Command="{Binding PrepareCommand}" IsEnabled="{Binding CanPrepare}" Content="Prepare" HorizontalAlignment="Left" Height="20" Width="75" Margin="5,0,0,0" Grid.Row="1" Grid.Column="2"/>
+                    <Button Command="{Binding CancelCommand}" IsEnabled="{Binding CanCancel}" Content="Cancel" HorizontalAlignment="Left" Height="20" Width="75" Margin="5,0,0,0" Grid.Row="1" Grid.Column="3"/>
+                    <CheckBox IsChecked="True" Command="{Binding ForceFPSCommand}" CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Self}}" IsEnabled="{Binding CanForceFPS}" Content="Force 15 FPS" HorizontalAlignment="Left" VerticalContentAlignment="Center" Height="20" Margin="5,0,0,0" Grid.Row="1" Grid.Column="5"/>
+                </Grid>
+
+            </Grid>
+        </Grid>
+        <StatusBar Grid.Row="2" HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Bottom" Margin="0,2.5,10,10" Grid.ColumnSpan="2" Background="White">
+            <StatusBarItem Content="IP:"/>
+            <ComboBox ItemsSource="{Binding IP}" SelectedIndex="0"/>
+            <StatusBarItem Content="Status:" Margin="20,0,0,0"/>
+            <StatusBarItem Content="{Binding RemoteKinect.Server.Status}"/>
+            <StatusBarItem Content="Kinect status:" Margin="20,0,0,0"/>
+            <StatusBarItem Content="{Binding LocalKinect.KinectController.Status, TargetNullValue=Disconnected}"/>
+            <StatusBarItem Content="Kinect FPS:" Margin="20,0,0,0"/>
+            <StatusBarItem Content="{Binding LocalKinect.KinectController.FPS, TargetNullValue=0}"/>
+        </StatusBar>
+    </Grid>
+</Window>

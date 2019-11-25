@@ -1,0 +1,115 @@
+﻿<Window x:Class="Server.Views.DataHistory"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Server.ViewModels"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:local="clr-namespace:Server.Views"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        mc:Ignorable="d"
+        Title="DataHistory" Height="559.735" Width="1000.212">
+    <Window.Resources>
+        <vm:DataHistoryViewModel    x:Key="DataHistoryVM"/>
+    </Window.Resources>
+
+    <Grid  DataContext="{StaticResource DataHistoryVM}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" HorizontalAlignment="Right">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding DataHistoryModel.Search, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Width="200" Height="25"  Margin="5,0,0,0" VerticalContentAlignment="Center" Grid.Column="1">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding FilterAppliedCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                <Label Content="Search:" Grid.Row="0" Width="60" Height="25" Margin="0,0,0,0" VerticalContentAlignment="Center" Grid.Column="0"/>
+            </Grid>
+                <Grid Grid.Column="1" HorizontalAlignment="Right">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="Gender:" Grid.Row="0" Width="Auto" Height="25" Margin="25,0,0,0" VerticalContentAlignment="Center" Grid.Column="0"/>
+                    <ComboBox Name="dsComboBox" Text="Gender" Margin="5,0,0,0" Width="80" Height="25" SelectedIndex="2" VerticalContentAlignment="Center" 
+                              HorizontalContentAlignment="Left" Grid.Column="1" SelectedItem="{Binding DataHistoryModel.Gender, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
+                        <i:Interaction.Triggers>                        
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding FilterAppliedCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <ComboBoxItem Content="Man"/>
+                        <ComboBoxItem Content="Woman"/>
+                        <ComboBoxItem Content="Both"/>
+                    </ComboBox>
+                </Grid>
+
+            <Grid Grid.Column="2" HorizontalAlignment="Right">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="From:" Grid.Row="0" Width="Auto" Height="25" Margin="25,0,0,0" VerticalContentAlignment="Center" Grid.Column="0"/>
+                <DatePicker DisplayDate="01/01/2019" Grid.Column="1" SelectedDate="{Binding DataHistoryModel.From, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">                    
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectedDateChanged">
+                            <i:InvokeCommandAction Command="{Binding FilterAppliedCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </DatePicker>
+                <Label Content="To:" Grid.Row="0" Width="Auto" Height="25" Margin="25,0,0,0" VerticalContentAlignment="Center" Grid.Column="2"/>
+                <DatePicker DisplayDate="01/01/2019" Grid.Column="3" SelectedDate="{Binding DataHistoryModel.To, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectedDateChanged">
+                            <i:InvokeCommandAction Command="{Binding FilterAppliedCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </DatePicker>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="Play" Command="{Binding PlaySessionCommand}" Grid.Row="0" Height="20" Width="75" Margin="5,0,0,0" VerticalContentAlignment="Center" Grid.Column="1"/>
+            <Button Content="Remove" Command="{Binding DeleteSelectionCommand}" Grid.Row="0" Height="20" Width="75" Margin="5,0,0,0" VerticalContentAlignment="Center" Grid.Column="2"/>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="0" Margin="10,0,10,10">
+            <!--<DataGrid  HeadersVisibility="All" HorizontalContentAlignment="Center" x:Name="lbx_sessions" ItemsSource="{Binding SessionsCollection}" SelectedItem="{Binding SelectedSession}"
+                       IsReadOnly="True" >-->
+            <DataGrid Name="dsDatagrid" ColumnWidth="*" ItemsSource="{Binding SessionsCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Extended" IsReadOnly="True">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:InvokeCommandAction Command="{Binding ShowSessionsCollectionCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding UpdateSelectionCommand}" CommandParameter="{Binding  SelectedItems, ElementName=dsDatagrid}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                
+            </DataGrid>            
+        </Grid>
+    </Grid>
+</Window>

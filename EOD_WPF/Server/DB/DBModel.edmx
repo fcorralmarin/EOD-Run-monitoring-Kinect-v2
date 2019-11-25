@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DBModel.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="Data Source=D:\Universidad\Cuarto\TFG\EOD_WPF\EOD_WPF\Server\DB\donotdeleteme.db" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Athlete">
+          <Key>
+            <PropertyRef Name="athlete_hash" />
+          </Key>
+          <Property Name="athlete_hash" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="identification_number" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="gender" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Frame">
+          <Key>
+            <PropertyRef Name="session_hash" />
+            <PropertyRef Name="timestamp" />
+            <PropertyRef Name="is_local_device" />
+          </Key>
+          <Property Name="session_hash" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="timestamp" Type="integer" Nullable="false" />
+          <Property Name="is_local_device" Type="integer" Nullable="false" />
+          <Property Name="serialized_object" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Session">
+          <Key>
+            <PropertyRef Name="session_hash" />
+          </Key>
+          <Property Name="session_hash" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="athlete_hash" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="treadmill_speed" Type="real" Nullable="false" />
+          <Property Name="saved" Type="integer" Nullable="false" />
+          <Property Name="date" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="height" Type="integer" Nullable="false" />
+          <Property Name="duration" Type="integer" Nullable="false" />
+          <Property Name="weight" Type="real" Nullable="false" />
+          <Property Name="footwear" Type="integer" Nullable="false" />
+          <Property Name="pathtoframes" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Frame_0_0">
+          <End Role="Session" Type="Self.Session" Multiplicity="1" />
+          <End Role="Frame" Type="Self.Frame" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Session">
+              <PropertyRef Name="session_hash" />
+            </Principal>
+            <Dependent Role="Frame">
+              <PropertyRef Name="session_hash" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Session_0_0">
+          <End Role="Athlete" Type="Self.Athlete" Multiplicity="1" />
+          <End Role="Session" Type="Self.Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Athlete">
+              <PropertyRef Name="athlete_hash" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="athlete_hash" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBModelStoreContainer">
+          <EntitySet Name="Athlete" EntityType="Self.Athlete" store:Type="Tables" />
+          <EntitySet Name="Frame" EntityType="Self.Frame" store:Type="Tables" />
+          <EntitySet Name="Session" EntityType="Self.Session" store:Type="Tables" />
+          <AssociationSet Name="FK_Frame_0_0" Association="Self.FK_Frame_0_0">
+            <End Role="Session" EntitySet="Session" />
+            <End Role="Frame" EntitySet="Frame" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Session_0_0" Association="Self.FK_Session_0_0">
+            <End Role="Athlete" EntitySet="Athlete" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Athlete">
+          <Key>
+            <PropertyRef Name="athlete_hash" />
+          </Key>
+          <Property Name="athlete_hash" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="identification_number" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="gender" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Session" Relationship="Self.FK_Session_0_0" FromRole="Athlete" ToRole="Session" />
+        </EntityType>
+        <EntityType Name="Frame">
+          <Key>
+            <PropertyRef Name="session_hash" />
+            <PropertyRef Name="timestamp" />
+            <PropertyRef Name="is_local_device" />
+          </Key>
+          <Property Name="session_hash" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="timestamp" Type="Int64" Nullable="false" />
+          <Property Name="is_local_device" Type="Int64" Nullable="false" />
+          <Property Name="serialized_object" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Session" Relationship="Self.FK_Frame_0_0" FromRole="Frame" ToRole="Session" />
+        </EntityType>
+        <EntityType Name="Session">
+          <Key>
+            <PropertyRef Name="session_hash" />
+          </Key>
+          <Property Name="session_hash" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="athlete_hash" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="treadmill_speed" Type="Double" Nullable="false" />
+          <Property Name="saved" Type="Int64" Nullable="false" />
+          <Property Name="date" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="height" Type="Int64" Nullable="false" />
+          <Property Name="duration" Type="Int64" Nullable="false" />
+          <Property Name="weight" Type="Double" Nullable="false" />
+          <Property Name="footwear" Type="Int64" Nullable="false" />
+          <Property Name="pathtoframes" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Athlete" Relationship="Self.FK_Session_0_0" FromRole="Session" ToRole="Athlete" />
+          <NavigationProperty Name="Frame" Relationship="Self.FK_Frame_0_0" FromRole="Session" ToRole="Frame" />
+        </EntityType>
+        <Association Name="FK_Session_0_0">
+          <End Role="Athlete" Type="Self.Athlete" Multiplicity="1" />
+          <End Role="Session" Type="Self.Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Athlete">
+              <PropertyRef Name="athlete_hash" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="athlete_hash" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Frame_0_0">
+          <End Role="Session" Type="Self.Session" Multiplicity="1" />
+          <End Role="Frame" Type="Self.Frame" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Session">
+              <PropertyRef Name="session_hash" />
+            </Principal>
+            <Dependent Role="Frame">
+              <PropertyRef Name="session_hash" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Athlete" EntityType="Self.Athlete" />
+          <EntitySet Name="Frame" EntityType="Self.Frame" />
+          <EntitySet Name="Session" EntityType="Self.Session" />
+          <AssociationSet Name="FK_Session_0_0" Association="Self.FK_Session_0_0">
+            <End Role="Athlete" EntitySet="Athlete" />
+            <End Role="Session" EntitySet="Session" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Frame_0_0" Association="Self.FK_Frame_0_0">
+            <End Role="Session" EntitySet="Session" />
+            <End Role="Frame" EntitySet="Frame" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBModelStoreContainer" CdmEntityContainer="DBEntities">
+          <EntitySetMapping Name="Athlete">
+            <EntityTypeMapping TypeName="DBModel.Athlete">
+              <MappingFragment StoreEntitySet="Athlete">
+                <ScalarProperty Name="athlete_hash" ColumnName="athlete_hash" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="identification_number" ColumnName="identification_number" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Frame">
+            <EntityTypeMapping TypeName="DBModel.Frame">
+              <MappingFragment StoreEntitySet="Frame">
+                <ScalarProperty Name="session_hash" ColumnName="session_hash" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="is_local_device" ColumnName="is_local_device" />
+                <ScalarProperty Name="serialized_object" ColumnName="serialized_object" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Session">
+            <EntityTypeMapping TypeName="DBModel.Session">
+              <MappingFragment StoreEntitySet="Session">
+                <ScalarProperty Name="session_hash" ColumnName="session_hash" />
+                <ScalarProperty Name="athlete_hash" ColumnName="athlete_hash" />
+                <ScalarProperty Name="treadmill_speed" ColumnName="treadmill_speed" />
+                <ScalarProperty Name="saved" ColumnName="saved" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="height" ColumnName="height" />
+                <ScalarProperty Name="duration" ColumnName="duration" />
+                <ScalarProperty Name="weight" ColumnName="weight" />
+                <ScalarProperty Name="footwear" ColumnName="footwear" />
+                <ScalarProperty Name="pathtoframes" ColumnName="pathtoframes" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

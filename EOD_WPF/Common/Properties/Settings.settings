@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SharedUtils_WPF.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Status_SensorConnected" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Connected</Value>
+    </Setting>
+    <Setting Name="Status_SensorNotConnected" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Disconnected</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
